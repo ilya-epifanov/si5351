@@ -1,0 +1,12 @@
+[package]
+name = "si5351"
+version = "0.1.0"
+categories = ["embedded", "hardware-support", "no-std"]
+authors = ["Ilya Epifanov <elijah.epifanov@gmail.com>"]
+
+[dependencies]
+embedded-hal = "0.1.0"
+
+[dependencies.cast]
+default-features = false
+version = "0.2.2"

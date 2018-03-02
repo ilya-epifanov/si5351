@@ -1,12 +1,9 @@
 [package]
 name = "si5351"
-version = "0.1.0"
-categories = ["embedded", "hardware-support", "no-std"]
+version = "0.1.1"
+categories = ["embedded-hal-driver", "ham-radio", "clock", "pll" ]
 authors = ["Ilya Epifanov <elijah.epifanov@gmail.com>"]
 
 [dependencies]
-embedded-hal = "0.1.0"
-
-[dependencies.cast]
-default-features = false
-version = "0.2.2"
+embedded-hal = "0.1"
+bitflags = "1.0"

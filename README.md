@@ -1,5 +1,9 @@
 # si5351
 
+[![docs](https://docs.rs/si5351/badge.svg)](https://docs.rs/si5351)
+[![crates.io](https://img.shields.io/crates/v/si5351.svg)](https://crates.io/crates/si5351)
+[![ci](https://travis-ci.org/ilya-epifanov/si5351.svg)](https://travis-ci.org/ilya-epifanov/si5351)
+
 ## License
 
 Licensed under either of

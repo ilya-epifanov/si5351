@@ -6,6 +6,62 @@
    http://opensource.org/licenses/MIT>, at your option. This file may not be
    copied, modified, or distributed except according to those terms.
 */
+/*!
+A platform agnostic Rust driver for the [Si5351], based on the
+[`embedded-hal`] traits.
+
+## The Device
+
+The Silicon Labs [Si5351] is an any-frequency CMOS clock generator.
+
+The device has an I²C interface.
+
+## Usage
+
+Import this crate and an `embedded_hal` implementation:
+
+```
+extern crate stm32f103xx_hal as hal;
+extern crate si5351;
+```
+
+Initialize I²C bus (differs between `embedded_hal` implementations):
+
+```no_run
+# extern crate stm32f103xx_hal as hal;
+use hal::i2c::I2c;
+type I2C = ...;
+
+# fn main() {
+let i2c: I2C = initialize_i2c();
+# }
+```
+
+Then instantiate the device:
+
+```no_run
+# extern crate stm32f103xx_hal as hal;
+# extern crate si5351;
+use si5351;
+use si5351::{Si5351, Si5351Device};
+
+# fn main() {
+let mut clock = Si5351Device<'static, I2C>::new(i2c, false, 25_000_000);
+clock.init(si5351::CrystalLoad::_10)?;
+# }
+```
+
+And set frequency on one of the outputs:
+
+```no_run
+use si5351;
+
+clock.set_frequency(si5351::PLL::A, si5351::ClockOutput::Clk0, 14_175_000)?;
+```
+
+[Si5351]: https://www.silabs.com/documents/public/data-sheets/Si5351-B.pdf
+[`embedded-hal`]: https://github.com/japaric/embedded-hal
+*/
 //#![deny(missing_docs)]
 #![deny(warnings)]
 #![feature(unsize)]

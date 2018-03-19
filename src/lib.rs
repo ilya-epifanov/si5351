@@ -46,8 +46,21 @@ use si5351;
 use si5351::{Si5351, Si5351Device};
 
 # fn main() {
-let mut clock = Si5351Device<'static, I2C>::new(i2c, false, 25_000_000);
+let mut clock = Si5351Device<I2C>::new(&mut i2c, false, 25_000_000);
 clock.init(si5351::CrystalLoad::_10)?;
+# }
+```
+
+Or, if you have an [Adafruit module], you can use shortcut functions to initializate it:
+```no_run
+# extern crate stm32f103xx_hal as hal;
+# extern crate si5351;
+use si5351;
+use si5351::{Si5351, Si5351Device};
+
+# fn main() {
+let mut clock = Si5351Device<I2C>::new_adafruit_module(&mut i2c);
+clock.init_adafruit_module()?;
 # }
 ```
 
@@ -61,6 +74,7 @@ clock.set_frequency(si5351::PLL::A, si5351::ClockOutput::Clk0, 14_175_000)?;
 
 [Si5351]: https://www.silabs.com/documents/public/data-sheets/Si5351-B.pdf
 [`embedded-hal`]: https://github.com/japaric/embedded-hal
+[Adafruit module]: https://www.adafruit.com/product/2045
 */
 //#![deny(missing_docs)]
 #![deny(warnings)]

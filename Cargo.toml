@@ -1,7 +1,8 @@
 [package]
 name = "si5351"
 version = "0.1.4"
-categories = ["embedded", "no-std", "hardware-support", "embedded-hal-driver" ]
+keywords = ["embedded-hal-driver", "clock", "ham-radio"]
+categories = ["embedded", "no-std", "hardware-support"]
 authors = ["Ilya Epifanov <elijah.epifanov@gmail.com>"]
 description = "A platform agnostic driver for the Si5351 clock generator"
 license = "MIT OR Apache-2.0"

@@ -46,7 +46,7 @@ use si5351;
 use si5351::{Si5351, Si5351Device};
 
 # fn main() {
-let mut clock = Si5351Device<I2C>::new(&mut i2c, false, 25_000_000);
+let mut clock = Si5351Device<I2C>::new(i2c, false, 25_000_000);
 clock.init(si5351::CrystalLoad::_10)?;
 # }
 ```
@@ -59,7 +59,7 @@ use si5351;
 use si5351::{Si5351, Si5351Device};
 
 # fn main() {
-let mut clock = Si5351Device<I2C>::new_adafruit_module(&mut i2c);
+let mut clock = Si5351Device<I2C>::new_adafruit_module(i2c);
 clock.init_adafruit_module()?;
 # }
 ```
@@ -78,7 +78,6 @@ clock.set_frequency(si5351::PLL::A, si5351::ClockOutput::Clk0, 14_175_000)?;
 */
 //#![deny(missing_docs)]
 #![deny(warnings)]
-#![feature(unsize)]
 #![no_std]
 
 #[macro_use]
@@ -340,8 +339,8 @@ fn i2c_error<E>(_: E) -> Error {
 }
 
 /// Si5351 driver
-pub struct Si5351Device<'a, I2C: 'a> {
-    i2c: &'a mut I2C,
+pub struct Si5351Device<I2C> {
+    i2c: I2C,
     address: u8,
     xtal_freq: u32,
     clk_enabled_mask: u8,
@@ -349,7 +348,7 @@ pub struct Si5351Device<'a, I2C: 'a> {
     ms_src_mask: u8,
 }
 
-pub trait Si5351<'a> {
+pub trait Si5351 {
     fn init_adafruit_module(&mut self) -> Result<(), Error>;
     fn init(&mut self, xtal_load: CrystalLoad) -> Result<(), Error>;
     fn read_device_status(&mut self) -> Result<DeviceStatusBits, Error>;
@@ -370,12 +369,12 @@ pub trait Si5351<'a> {
     fn select_clock_pll(&mut self, clocl: ClockOutput, pll: PLL);
 }
 
-impl<'a, I2C, E> Si5351Device<'a, I2C>
+impl<I2C, E> Si5351Device<I2C>
     where
         I2C: WriteRead<Error=E> + Write<Error=E>,
 {
     /// Creates a new driver from a I2C peripheral
-    pub fn new(i2c: &'a mut I2C, address_bit: bool, xtal_freq: u32) -> Self {
+    pub fn new(i2c: I2C, address_bit: bool, xtal_freq: u32) -> Self {
         let si5351 = Si5351Device {
             i2c,
             address: ADDRESS | if address_bit { 1 } else { 0 },
@@ -388,7 +387,7 @@ impl<'a, I2C, E> Si5351Device<'a, I2C>
         si5351
     }
 
-    pub fn new_adafruit_module(i2c: &'a mut I2C) -> Self {
+    pub fn new_adafruit_module(i2c: I2C) -> Self {
         Si5351Device::new(i2c, false, 25_000_000)
     }
 
@@ -465,7 +464,7 @@ impl<'a, I2C, E> Si5351Device<'a, I2C>
     }
 }
 
-impl<'a, I2C, E> Si5351<'a> for Si5351Device<'a, I2C> where
+impl<I2C, E> Si5351 for Si5351Device<I2C> where
     I2C: WriteRead<Error=E> + Write<Error=E>
 {
     fn init_adafruit_module(&mut self) -> Result<(), Error> {

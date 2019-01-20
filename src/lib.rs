@@ -85,7 +85,7 @@ extern crate bitflags;
 extern crate embedded_hal as hal;
 
 use core::mem;
-use hal::blocking::i2c::{Write, WriteRead};
+use crate::hal::blocking::i2c::{Write, WriteRead};
 
 #[derive(Debug)]
 pub enum Error {

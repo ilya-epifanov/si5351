@@ -8,6 +8,7 @@ description = "A platform agnostic driver for the Si5351 clock generator"
 license = "MIT OR Apache-2.0"
 exclude = [".travis.yml", ".gitignore"]
 repository = "https://github.com/ilya-epifanov/si5351"
+edition = "2018"
 
 [badges.travis-ci]
 branch = "master"

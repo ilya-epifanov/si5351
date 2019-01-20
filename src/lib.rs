@@ -82,7 +82,7 @@ clock.set_frequency(si5351::PLL::A, si5351::ClockOutput::Clk0, 14_175_000)?;
 
 #[macro_use]
 extern crate bitflags;
-extern crate embedded_hal as hal;
+use embedded_hal as hal;
 
 use core::mem;
 use crate::hal::blocking::i2c::{Write, WriteRead};

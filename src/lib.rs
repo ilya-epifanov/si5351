@@ -77,7 +77,7 @@ clock.set_frequency(si5351::PLL::A, si5351::ClockOutput::Clk0, 14_175_000)?;
 [Adafruit module]: https://www.adafruit.com/product/2045
 */
 //#![deny(missing_docs)]
-#![deny(warnings)]
+//#![deny(warnings)]
 #![no_std]
 
 #[macro_use]
@@ -85,12 +85,22 @@ extern crate bitflags;
 use embedded_hal as hal;
 
 use core::mem;
+use core::fmt;
 use crate::hal::blocking::i2c::{Write, WriteRead};
 
 #[derive(Debug)]
 pub enum Error {
     CommunicationError,
     InvalidParameter,
+}
+
+impl fmt::Display for Error {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match self {
+            Error::CommunicationError => write!(f, "Communication Error"),
+            Error::InvalidParameter => write!(f, "Invalid Parameter")
+        }
+    }
 }
 
 #[derive(Debug, Copy, Clone)]

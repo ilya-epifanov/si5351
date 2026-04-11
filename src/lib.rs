@@ -82,10 +82,8 @@ clock.set_frequency(si5351::PLL::A, si5351::ClockOutput::Clk0, 14_175_000)?;
 
 #[macro_use]
 extern crate bitflags;
-use embedded_hal as hal;
 
-use core::mem;
-use crate::hal::blocking::i2c::{Write, WriteRead};
+use embedded_hal::i2c::I2c;
 
 #[derive(Debug)]
 pub enum Error {
@@ -369,9 +367,9 @@ pub trait Si5351 {
     fn select_clock_pll(&mut self, clocl: ClockOutput, pll: PLL);
 }
 
-impl<I2C, E> Si5351Device<I2C>
+impl<I2C> Si5351Device<I2C>
     where
-        I2C: WriteRead<Error=E> + Write<Error=E>,
+        I2C: I2c
 {
     /// Creates a new driver from a I2C peripheral
     pub fn new(i2c: I2C, address_bit: bool, xtal_freq: u32) -> Self {
@@ -448,7 +446,7 @@ impl<I2C, E> Si5351Device<I2C>
     }
 
     fn read_register(&mut self, reg: Register) -> Result<u8, Error> {
-        let mut buffer: [u8; 1] = unsafe { mem::uninitialized() };
+        let mut buffer: [u8; 1] = [0];
         self.i2c.write_read(self.address, &[reg.addr()], &mut buffer).map_err(i2c_error)?;
         Ok(buffer[0])
     }
@@ -464,8 +462,8 @@ impl<I2C, E> Si5351Device<I2C>
     }
 }
 
-impl<I2C, E> Si5351 for Si5351Device<I2C> where
-    I2C: WriteRead<Error=E> + Write<Error=E>
+impl<I2C> Si5351 for Si5351Device<I2C> where
+    I2C: I2c
 {
     fn init_adafruit_module(&mut self) -> Result<(), Error> {
         self.init(CrystalLoad::_10)
